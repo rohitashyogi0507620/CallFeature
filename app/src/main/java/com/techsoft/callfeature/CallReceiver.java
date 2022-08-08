@@ -71,44 +71,48 @@ public class CallReceiver extends PhonecallReceiver {
 
 
     private Bundle getCallDetails(Context context) {
-
         Bundle callData = new Bundle();
-        Cursor managedCursor = context.getContentResolver().query(CallLog.Calls.CONTENT_URI, null, null, null, CallLog.Calls.DATE + " DESC");
-        int number = managedCursor.getColumnIndex(CallLog.Calls.NUMBER);
-        int type = managedCursor.getColumnIndex(CallLog.Calls.TYPE);
-        int date = managedCursor.getColumnIndex(CallLog.Calls.DATE);
-        int duration = managedCursor.getColumnIndex(CallLog.Calls.DURATION);
-        while (managedCursor.moveToNext()) {
-            String phNumber = managedCursor.getString(number); // mobile number
-            String callType = managedCursor.getString(type); // call type
-            String callDate = managedCursor.getString(date); // call date
-            Date callDayTime = new Date(Long.valueOf(callDate));
-            String callDuration = managedCursor.getString(duration);
-            String dir = null;
-            int dircode = Integer.parseInt(callType);
-            switch (dircode) {
-                case CallLog.Calls.OUTGOING_TYPE:
-                    dir = "OUTGOING";
-                    break;
 
-                case CallLog.Calls.INCOMING_TYPE:
-                    dir = "INCOMING";
-                    break;
+        try {
+            Cursor managedCursor = context.getContentResolver().query(CallLog.Calls.CONTENT_URI, null, null, null, CallLog.Calls.DATE + " DESC");
+            int number = managedCursor.getColumnIndex(CallLog.Calls.NUMBER);
+            int type = managedCursor.getColumnIndex(CallLog.Calls.TYPE);
+            int date = managedCursor.getColumnIndex(CallLog.Calls.DATE);
+            int duration = managedCursor.getColumnIndex(CallLog.Calls.DURATION);
+            while (managedCursor.moveToNext()) {
+                String phNumber = managedCursor.getString(number); // mobile number
+                String callType = managedCursor.getString(type); // call type
+                String callDate = managedCursor.getString(date); // call date
+                Date callDayTime = new Date(Long.valueOf(callDate));
+                String callDuration = managedCursor.getString(duration);
+                String dir = null;
+                int dircode = Integer.parseInt(callType);
+                switch (dircode) {
+                    case CallLog.Calls.OUTGOING_TYPE:
+                        dir = "OUTGOING";
+                        break;
 
-                case CallLog.Calls.MISSED_TYPE:
-                    dir = "MISSED";
-                    break;
+                    case CallLog.Calls.INCOMING_TYPE:
+                        dir = "INCOMING";
+                        break;
+
+                    case CallLog.Calls.MISSED_TYPE:
+                        dir = "MISSED";
+                        break;
+                }
+
+                callData.putString("Number", phNumber);
+                callData.putString("Duration", callDuration);
+                callData.putString("Type", dir);
+                callData.putString("Time", callDayTime.toString());
+
+                break;
+
+
             }
-
-            callData.putString("Number", phNumber);
-            callData.putString("Duration", callDuration);
-            callData.putString("Type", dir);
-            callData.putString("Time", callDayTime.toString());
-
-            break;
-
-
+        } catch (Exception e) {
         }
+
         return callData;
     }
 
