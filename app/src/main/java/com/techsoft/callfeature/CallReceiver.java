@@ -79,6 +79,7 @@ public class CallReceiver extends PhonecallReceiver {
             int type = managedCursor.getColumnIndex(CallLog.Calls.TYPE);
             int date = managedCursor.getColumnIndex(CallLog.Calls.DATE);
             int duration = managedCursor.getColumnIndex(CallLog.Calls.DURATION);
+
             while (managedCursor.moveToNext()) {
                 String phNumber = managedCursor.getString(number); // mobile number
                 String callType = managedCursor.getString(type); // call type
