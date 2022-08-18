@@ -44,21 +44,34 @@ public abstract class PhonecallReceiver extends BroadcastReceiver {
             } else if (stateStr.equals(TelephonyManager.EXTRA_STATE_RINGING)) {
                 state = TelephonyManager.CALL_STATE_RINGING;
             }
-            if (number == null) {
-                TelephonyManager telephony = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-                telephony.listen(new PhoneStateListener() {
-                    @Override
-                    public void onCallStateChanged(int state, String incomingNumber) {
-                        super.onCallStateChanged(state, incomingNumber);
-                        name = VerifyMobileNumber(context, incomingNumber);
-                        onCallStateChangedProcess(context, state, incomingNumber, name);
-                        System.out.println("IncomingNumber : " + incomingNumber);
-                    }
-                }, PhoneStateListener.LISTEN_CALL_STATE);
-            } else {
-                name = VerifyMobileNumber(context, number);
-                onCallStateChangedProcess(context, state, number, name);
-            }
+
+            TelephonyManager telephony = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+            telephony.listen(new PhoneStateListener() {
+                @Override
+                public void onCallStateChanged(int state, String incomingNumber) {
+                    super.onCallStateChanged(state, incomingNumber);
+                    name = VerifyMobileNumber(context, incomingNumber);
+                    onCallStateChangedProcess(context, state, incomingNumber, name);
+                    System.out.println("IncomingNumber : " + incomingNumber);
+                }
+            }, PhoneStateListener.LISTEN_CALL_STATE);
+
+
+//            if (number == null) {
+//                TelephonyManager telephony = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+//                telephony.listen(new PhoneStateListener() {
+//                    @Override
+//                    public void onCallStateChanged(int state, String incomingNumber) {
+//                        super.onCallStateChanged(state, incomingNumber);
+//                        name = VerifyMobileNumber(context, incomingNumber);
+//                        onCallStateChangedProcess(context, state, incomingNumber, name);
+//                        System.out.println("IncomingNumber : " + incomingNumber);
+//                    }
+//                }, PhoneStateListener.LISTEN_CALL_STATE);
+//            } else {
+//                name = VerifyMobileNumber(context, number);
+//                onCallStateChangedProcess(context, state, number, name);
+//            }
 
         }
     }

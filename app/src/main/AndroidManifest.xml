@@ -5,6 +5,8 @@
 
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.READ_PRIVILEGED_PHONE_STATE"
+        tools:ignore="ProtectedPermissions" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     // Read Phone Number name
 
@@ -35,20 +37,23 @@
             </intent-filter>
         </activity>
 
+<!--        <receiver-->
+<!--            android:name=".CallReceiver"-->
+<!--            android:exported="true"-->
+<!--           >-->
+<!--            <intent-filter android:priority="100">-->
+<!--                <action android:name="android.intent.action.PHONE_STATE" />-->
+<!--                <action android:name="android.intent.action.NEW_OUTGOING_CALL"/>-->
+<!--            </intent-filter>-->
+
+<!--        </receiver>  -->
         <receiver
-            android:name=".CallReceiver"
+            android:name=".CallStateListener"
             android:exported="true"
-            android:permission="android.permission.BIND_DEVICE_ADMIN">
-            <intent-filter>
+           >
+            <intent-filter android:priority="100">
                 <action android:name="android.intent.action.PHONE_STATE" />
-            </intent-filter>
-
-            <intent-filter>
-                <action android:name="android.intent.action.NEW_OUTGOING_CALL" />
-            </intent-filter>
-
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.NEW_OUTGOING_CALL"/>
             </intent-filter>
 
         </receiver>

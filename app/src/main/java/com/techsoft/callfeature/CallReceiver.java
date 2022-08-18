@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.provider.CallLog;
 import android.util.Log;
 
+import java.lang.reflect.Field;
 import java.util.Date;
 
 public class CallReceiver extends PhonecallReceiver {
@@ -37,7 +38,7 @@ public class CallReceiver extends PhonecallReceiver {
 
     @Override
     protected void onOutgoingCallEnded(Context ctx, String number, Date start, Date end, String name) {
-        Log.d("PhoneCall", "Person name : " + name);
+        Log.d("PhoneCallEnded", "Person name : " + name);
         startBroadCastReceiver(ctx);
 
     }
@@ -79,6 +80,7 @@ public class CallReceiver extends PhonecallReceiver {
             int type = managedCursor.getColumnIndex(CallLog.Calls.TYPE);
             int date = managedCursor.getColumnIndex(CallLog.Calls.DATE);
             int duration = managedCursor.getColumnIndex(CallLog.Calls.DURATION);
+            int simcard = managedCursor.getColumnIndex(CallLog.Calls.PHONE_ACCOUNT_ID);
 
             while (managedCursor.moveToNext()) {
                 String phNumber = managedCursor.getString(number); // mobile number
@@ -86,6 +88,7 @@ public class CallReceiver extends PhonecallReceiver {
                 String callDate = managedCursor.getString(date); // call date
                 Date callDayTime = new Date(Long.valueOf(callDate));
                 String callDuration = managedCursor.getString(duration);
+                String callSim = managedCursor.getString(simcard);
                 String dir = null;
                 int dircode = Integer.parseInt(callType);
                 switch (dircode) {
@@ -106,7 +109,7 @@ public class CallReceiver extends PhonecallReceiver {
                 callData.putString("Duration", callDuration);
                 callData.putString("Type", dir);
                 callData.putString("Time", callDayTime.toString());
-
+                Log.d("MobileSIM", callSim);
                 break;
 
 

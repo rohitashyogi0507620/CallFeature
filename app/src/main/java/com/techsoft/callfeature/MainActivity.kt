@@ -1,16 +1,22 @@
 package com.techsoft.callfeature
 
 import android.Manifest
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
+import android.telephony.PhoneStateListener
+import android.telephony.TelephonyManager
+import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.techsoft.callfeature.databinding.ActivityMainBinding
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -18,6 +24,7 @@ class MainActivity : AppCompatActivity() {
 
     var active = MutableLiveData<Boolean>(false)
     var mobilenumber: String = ""
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,13 +57,22 @@ class MainActivity : AppCompatActivity() {
 
                     var sessionManager = SessionManager()
                     sessionManager!!.setContext("RMCALLDATA", applicationContext)
-
                     var phonenumber = sessionManager.getData("Number")
                     var duration = sessionManager.getData("Duration")
                     var type = sessionManager.getData("Type")
                     var time = sessionManager.getData("Time")
 
                     if (phonenumber != null && !phonenumber.isEmpty()) {
+
+                        phonenumber = phonenumber!!.replace(" ", "")
+                        if (phonenumber!!.contains("+91")) {
+                            phonenumber = phonenumber.replace("+91", "")
+                        }
+                        Log.d(
+                            "MobileNumber",
+                            "History Number : $phonenumber Dial Number $mobilenumber"
+                        )
+
                         if (!mobilenumber.isEmpty() && phonenumber.equals(mobilenumber)) {
                             binding.testTxtCalldata.setText("Number $phonenumber \n Duration : $duration \n Type :$type \n Time $time")
                         } else {
@@ -73,6 +89,8 @@ class MainActivity : AppCompatActivity() {
 
 
         })
+
+
 
 
     }
